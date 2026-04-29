@@ -146,7 +146,9 @@ if (hasAttendingPerson) {
 
         <section className="weddingHero">
           <div className="invitationCard">
-            <div className="crossMark">✝</div>
+          <div className="crossMark" aria-label="Cross">
+  <span>✝</span>
+</div>
 
             <div className="inviteKicker">
               <Sparkles size={16} />

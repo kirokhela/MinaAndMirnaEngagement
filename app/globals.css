@@ -143,10 +143,23 @@ textarea {
 }
 
 .crossMark {
-  font-size: 58px;
+  width: 58px;
+  height: 58px;
+  margin: 0 auto 18px;
+  display: grid;
+  place-items: center;
   color: var(--gold);
-  margin-bottom: 18px;
-  text-shadow: 0 8px 20px rgba(168, 120, 36, 0.2);
+  font-size: 52px;
+  line-height: 1;
+  font-family: "Times New Roman", Georgia, serif;
+  font-weight: 400;
+  text-shadow: 0 8px 20px rgba(168, 120, 36, 0.22);
+}
+
+.crossMark {
+  font-size: 52px;
+  width: 58px;
+  height: 58px;
 }
 
 .inviteKicker {
