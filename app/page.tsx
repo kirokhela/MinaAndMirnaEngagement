@@ -5,7 +5,11 @@ import {
   Crown,
   Heart,
   MapPin,
-  Sparkles
+  Plus,
+  Sparkles,
+  Trash2,
+  Volume2,
+  VolumeX
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -15,23 +19,46 @@ const wedding = {
   bride: process.env.NEXT_PUBLIC_WEDDING_BRIDE || "Mirna",
   date: process.env.NEXT_PUBLIC_WEDDING_DATE || "Friday, 15 May 2026",
   time: process.env.NEXT_PUBLIC_WEDDING_TIME || "6:00 PM",
-  location:
-    process.env.NEXT_PUBLIC_WEDDING_LOCATION ||
-    "Fleet club,ElZamalek",
+  Church: process.env.NEXT_PUBLIC_WEDDING_CHURCH || "St. Mary and St. Athanasius Church, Nasr City",
+  location: process.env.NEXT_PUBLIC_WEDDING_LOCATION || "Fleet Club, El Zamalek",
+};
+
+type Person = {
+  name: string;
+  phone: string;
+  attending: "yes" | "no";
 };
 
 export default function HomePage() {
-  const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    attending: "yes",
-    guestsCount: 1,
-    note: "",
-  });
+  const [musicStarted, setMusicStarted] = useState(false);
 
+  const [people, setPeople] = useState<Person[]>([
+    { name: "", phone: "", attending: "yes" },
+  ]);
+
+  const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  function updatePerson(index: number, field: keyof Person, value: string) {
+    setPeople((current) => {
+      const updated = [...current];
+      updated[index] = { ...updated[index], [field]: value };
+      return updated;
+    });
+  }
+
+  function addPerson() {
+    setPeople((current) => [
+      ...current,
+      { name: "", phone: "", attending: "yes" },
+    ]);
+  }
+
+  function removePerson(index: number) {
+    setPeople((current) => current.filter((_, i) => i !== index));
+  }
 
   async function submitRsvp(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -39,34 +66,69 @@ export default function HomePage() {
     setMessage("");
     setError("");
 
-    const response = await fetch("/api/rsvp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    try {
+      for (const person of people) {
+        const response = await fetch("/api/rsvp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: person.name,
+            phone: person.phone,
+            attending: person.attending,
+            guestsCount: 1,
+            note,
+          }),
+        });
 
-    const result = await response.json();
-    setLoading(false);
+        const result = await response.json();
 
-    if (!response.ok) {
-      setError(result.message || "Something went wrong.");
-      return;
+        if (!response.ok) {
+          setError(result.message || "Something went wrong.");
+          setLoading(false);
+          return;
+        }
+      }
+
+  const hasAttendingPerson = people.some((person) => person.attending === "yes");
+
+if (hasAttendingPerson) {
+  setMessage("Thank you! Waiting for you ❤️");
+} else {
+  setMessage("We Will Miss U 😭");
+}
+      setPeople([{ name: "", phone: "", attending: "yes" }]);
+      setNote("");
+    } catch {
+      setError("Something went wrong.");
     }
 
-    setMessage("Thank you! Your RSVP has been saved.");
-    setForm({
-      name: "",
-      phone: "",
-      attending: "yes",
-      guestsCount: 1,
-      note: "",
-    });
+    setLoading(false);
   }
 
   return (
     <main className="weddingPage">
       <div className="goldGlow goldGlowOne" />
       <div className="goldGlow goldGlowTwo" />
+
+      <div className="musicPlayerBox">
+        <button
+          type="button"
+          className={`musicButton ${musicStarted ? "playing" : ""}`}
+          onClick={() => setMusicStarted((value) => !value)}
+        >
+          {musicStarted ? <VolumeX size={22} /> : <Volume2 size={22} />}
+          <span>{musicStarted ? "Stop Music" : "Play Wedding Music"}</span>
+        </button>
+
+        {musicStarted && (
+          <iframe
+            className="youtubeMusicFrame"
+            src="https://www.youtube.com/embed/mlwdHqygd-M?autoplay=1&playsinline=1&loop=1&playlist=mlwdHqygd-M"
+            title="Wedding Music"
+            allow="autoplay; encrypted-media"
+          />
+        )}
+      </div>
 
       <div className="weddingContainer">
         <nav className="weddingNav">
@@ -84,11 +146,6 @@ export default function HomePage() {
 
         <section className="weddingHero">
           <div className="invitationCard">
-            <div className="corner cornerTL" />
-            <div className="corner cornerTR" />
-            <div className="corner cornerBL" />
-            <div className="corner cornerBR" />
-
             <div className="crossMark">✝</div>
 
             <div className="inviteKicker">
@@ -122,109 +179,145 @@ export default function HomePage() {
               </div>
             </div>
 
+               <div className="ChurchlocationBox">
+              <p>    <MapPin size={20} /> {wedding.Church}</p>
+            </div>
+
             <div className="locationBox">
-              <MapPin size={20} />
-              <p>{wedding.location}</p>
+           
+              <p>   <MapPin size={20} /> {wedding.location}</p>
             </div>
 
             <div className="heroDetails">
-          
-
-                <a
-  className="locationButton"
-  href="https://www.google.com/maps/place/FLEET+CLUB+EL+GEZIRAH/@30.0404173,31.2235516,17z/data=!3m1!4b1!4m6!3m5!1s0x1458410008dedd15:0xad624ac096c218b7!8m2!3d30.0404173!4d31.2261265!16s%2Fg%2F11h6n12nwz?entry=ttu&g_ep=EgoyMDI2MDQyNy4wIKXMDSoASAFQAw%3D%3D"
-  target="_blank"
-  rel="noopener noreferrer"
->
-  <MapPin size={18} />
-  Open Location
-</a>
-  
+              <a
+                className="locationButton"
+                href="https://www.google.com/maps/place/FLEET+CLUB+EL+GEZIRAH/@30.0404173,31.2235516,17z/data=!3m1!4b1!4m6!3m5!1s0x1458410008dedd15:0xad624ac096c218b7!8m2!3d30.0404173!4d31.2261265!16s%2Fg%2F11h6n12nwz?entry=ttu&g_ep=EgoyMDI2MDQyNy4wIKXMDSoASAFQAw%3D%3D"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <MapPin size={18} />
+                Open Fleet Club Location
+              </a>
             </div>
           </div>
 
           <form className="rsvpCard" onSubmit={submitRsvp}>
-        <div className="formTopOrnament">◆</div>
+            <div className="formTopOrnament">◆</div>
 
-        <div className="formHeader">
-          <span>
-            <Crown size={20} />
-          </span>
-          <div>
-            <p className="formKicker">RSVP FORM</p>
-            <h3>Confirm Attendance</h3>
-            <p>Please fill this form once for accurate seating.</p>
-          </div>
-        </div>
+            <div className="formHeader">
+              <span>
+                <Crown size={20} />
+              </span>
 
-        {message && <div className="alert success">{message}</div>}
-        {error && <div className="alert error">{error}</div>}
+              <div>
+                <p className="formKicker">RSVP FORM</p>
+                <h3>Confirm Attendance</h3>
+                <p>Add one or more people. Each person will be saved separately.</p>
+              </div>
+            </div>
 
-        <div className="formBody">
-          <label className="field">
-            <span>Full Name</span>
-            <input
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="Example: David Samy"
-              required
-            />
-          </label>
+            {message && <div className="alert success">{message}</div>}
+            {error && <div className="alert error">{error}</div>}
 
-    <label className="field">
-  <span>Phone Number</span>
-  <input
-    value={form.phone}
-    onChange={(e) => {
-      const onlyNumbers = e.target.value.replace(/\D/g, "").slice(0, 11);
-      setForm({ ...form, phone: onlyNumbers });
-    }}
-    placeholder="01xxxxxxxxxxxx"
-    inputMode="numeric"
-    pattern="[0-9]{11m}"
-    minLength={11}
-    maxLength={11}
-    title="Phone number must be exactly 11 digits"
-    required
-  />
-</label>
+            <div className="formBody">
+              <div className="peopleList">
+                {people.map((person, index) => (
+                  <div className="personCard" key={index}>
+                    <div className="personHeader">
+                      <strong>Person {index + 1}</strong>
 
-         <div className="attendanceButtons">
-  <button
-    type="button"
-    className={`attendanceOption ${form.attending === "yes" ? "active" : ""}`}
-    onClick={() => setForm({ ...form, attending: "yes", guestsCount: 1 })}
-  >
-    Yes, I will attend
-  </button>
+                      {people.length > 1 && (
+                        <button
+                          type="button"
+                          className="removePersonBtn"
+                          onClick={() => removePerson(index)}
+                        >
+                          <Trash2 size={15} />
+                          Remove
+                        </button>
+                      )}
+                    </div>
 
+                    <label className="field">
+                      <span>Full Name</span>
+                      <input
+                        value={person.name}
+                        onChange={(e) => updatePerson(index, "name", e.target.value)}
+                        placeholder="Example: Kirolos Amgad"
+                        required
+                      />
+                    </label>
 
-  <button
-    type="button"
-    className={`attendanceOption ${form.attending === "no" ? "active" : ""}`}
-    onClick={() => setForm({ ...form, attending: "no", guestsCount: 1 })}
-  >
-    No, sorry
-  </button>
-</div>
+                    <label className="field">
+                      <span>Phone Number</span>
+                      <input
+                        value={person.phone}
+                        onChange={(e) => {
+                          const onlyNumbers = e.target.value
+                            .replace(/\D/g, "")
+                            .slice(0, 11);
 
-          <label className="field">
-            <span>Leave a message for the host</span>
-            <textarea
-              value={form.note}
-              onChange={(e) => setForm({ ...form, note: e.target.value })}
-              placeholder="Share your wishes or a special message for Mina & Mirna ✨"
-            />
-          </label>
-        </div>
+                          updatePerson(index, "phone", onlyNumbers);
+                        }}
+                        placeholder="01xxxxxxxxx"
+                        inputMode="numeric"
+                        pattern="[0-9]{11}"
+                        minLength={11}
+                        maxLength={11}
+                        title="Phone number must be exactly 11 digits"
+                        required
+                      />
+                    </label>
 
-        <button className="submitBtn" disabled={loading} type="submit">
-          <CheckCircle2 size={20} />
-          {loading ? "Saving..." : "Send RSVP"}
-        </button>
+                    <div className="attendanceButtons">
+                      <button
+                        type="button"
+                        className={`attendanceOption ${
+                          person.attending === "yes" ? "active" : ""
+                        }`}
+                        onClick={() => updatePerson(index, "attending", "yes")}
+                      >
+                        Yes, I will attend
+                      </button>
 
-        <p className="privacyText">Your response is private and saved securely.</p>
-      </form>
+                      <button
+                        type="button"
+                        className={`attendanceOption ${
+                          person.attending === "no" ? "active" : ""
+                        }`}
+                        onClick={() => updatePerson(index, "attending", "no")}
+                      >
+                        No, sorry
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <button type="button" className="addPersonBtn" onClick={addPerson}>
+                <Plus size={18} />
+                Add another person
+              </button>
+
+              <label className="field">
+                <span>Leave a message for the host</span>
+                <textarea
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  placeholder="Share your wishes or a special message for Mina & Mirna ✨"
+                />
+              </label>
+            </div>
+
+            <button className="submitBtn" disabled={loading} type="submit">
+              <CheckCircle2 size={20} />
+              {loading ? "Saving..." : "Send"}
+            </button>
+
+            <p className="privacyText">
+              Your response is private and saved securely.
+            </p>
+          </form>
         </section>
       </div>
     </main>

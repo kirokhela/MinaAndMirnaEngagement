@@ -242,6 +242,19 @@ textarea {
   margin: auto;
 }
 
+
+.ChurchlocationBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--navy);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  max-width: 700px;
+  margin: auto;
+}
 .heroDetails {
   display: flex;
   gap: 12px;
@@ -756,6 +769,103 @@ textarea {
   border-color: transparent;
   box-shadow: 0 14px 26px rgba(168, 120, 36, 0.22);
 }
+
+.musicPlayerBox {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 9999;
+}
+
+.musicButton {
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  background: linear-gradient(135deg, #0d2a57, #164985);
+  color: white;
+  border-radius: 999px;
+  padding: 16px 22px;
+  font-weight: 900;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow:
+    0 20px 45px rgba(13, 42, 87, 0.35),
+    0 0 0 6px rgba(168, 120, 36, 0.16);
+}
+
+.musicButton.playing {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+}
+
+.youtubeMusicFrame {
+  position: absolute;
+  left: -9999px;
+  bottom: 0;
+  width: 220px;
+  height: 140px;
+  opacity: 0.01;
+  pointer-events: none;
+  border: 0;
+}
+
+.peopleList {
+  display: grid;
+  gap: 18px;
+}
+
+.personCard {
+  border: 1px solid rgba(168, 120, 36, 0.22);
+  background: rgba(255, 255, 255, 0.42);
+  border-radius: 24px;
+  padding: 18px;
+  display: grid;
+  gap: 15px;
+}
+
+.personHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.personHeader strong {
+  color: var(--gold);
+  font-size: 17px;
+}
+
+.removePersonBtn {
+  border: 1px solid rgba(176, 42, 55, 0.22);
+  background: rgba(176, 42, 55, 0.08);
+  color: var(--danger);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 900;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.addPersonBtn {
+  border: 1px dashed var(--border-gold);
+  background: rgba(168, 120, 36, 0.08);
+  color: var(--navy);
+  border-radius: 20px;
+  padding: 15px 16px;
+  font-weight: 900;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+}
+
+.addPersonBtn:hover {
+  background: rgba(168, 120, 36, 0.14);
+}
+
 /* Responsive */
 
 @media (max-width: 1000px) {
