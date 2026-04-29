@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Mina And Mirna Engagement",
-  description: "Mina And Mirna Engagement attendance RSVP website",
+  description: "Mina And Mirna Engagement RSVP website",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
