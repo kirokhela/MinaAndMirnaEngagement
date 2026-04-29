@@ -12,7 +12,7 @@ import {
   VolumeX
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const wedding = {
   groom: process.env.NEXT_PUBLIC_WEDDING_GROOM || "Mina",
@@ -31,7 +31,20 @@ type Person = {
 
 export default function HomePage() {
   const [musicStarted, setMusicStarted] = useState(false);
+const audioRef = useRef<HTMLAudioElement | null>(null);
 
+function toggleMusic() {
+  const audio = audioRef.current;
+  if (!audio) return;
+
+  if (musicStarted) {
+    audio.pause();
+    setMusicStarted(false);
+  } else {
+    audio.play();
+    setMusicStarted(true);
+  }
+}
   const [people, setPeople] = useState<Person[]>([
     { name: "", phone: "", attending: "yes" },
   ]);
@@ -110,25 +123,18 @@ if (hasAttendingPerson) {
       <div className="goldGlow goldGlowOne" />
       <div className="goldGlow goldGlowTwo" />
 
-      <div className="musicPlayerBox">
-        <button
-          type="button"
-          className={`musicButton ${musicStarted ? "playing" : ""}`}
-          onClick={() => setMusicStarted((value) => !value)}
-        >
-          {musicStarted ? <VolumeX size={22} /> : <Volume2 size={22} />}
-          <span>{musicStarted ? "Stop Music" : "Play Wedding Music"}</span>
-        </button>
+<div className="musicPlayerBox">
+  <button
+    type="button"
+    className={`musicButton ${musicStarted ? "playing" : ""}`}
+    onClick={toggleMusic}
+  >
+    {musicStarted ? <VolumeX size={22} /> : <Volume2 size={22} />}
+    <span>{musicStarted ? "Stop Music" : "Play Wedding Music"}</span>
+  </button>
 
-        {musicStarted && (
-          <iframe
-            className="youtubeMusicFrame"
-            src="https://www.youtube.com/embed/mlwdHqygd-M?autoplay=1&playsinline=1&loop=1&playlist=mlwdHqygd-M"
-            title="Wedding Music"
-            allow="autoplay; encrypted-media"
-          />
-        )}
-      </div>
+  <audio ref={audioRef} src="/music/wedding.mp3" loop preload="auto" />
+</div>
 
       <div className="weddingContainer">
         <nav className="weddingNav">
