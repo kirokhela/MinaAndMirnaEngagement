@@ -14,10 +14,10 @@ const wedding = {
   groom: process.env.NEXT_PUBLIC_WEDDING_GROOM || "Mina",
   bride: process.env.NEXT_PUBLIC_WEDDING_BRIDE || "Mirna",
   date: process.env.NEXT_PUBLIC_WEDDING_DATE || "Friday, 15 May 2026",
-  time: process.env.NEXT_PUBLIC_WEDDING_TIME || "4:00 PM",
+  time: process.env.NEXT_PUBLIC_WEDDING_TIME || "6:00 PM",
   location:
     process.env.NEXT_PUBLIC_WEDDING_LOCATION ||
-    "Fleet club, Nasr City",
+    "Fleet club,ElZamalek",
 };
 
 export default function HomePage() {
