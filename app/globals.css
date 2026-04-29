@@ -142,26 +142,38 @@ textarea {
   transform: rotate(180deg);
 }
 
-.crossMark {
-  width: 58px;
-  height: 58px;
-  margin: 0 auto 18px;
-  display: grid;
-  place-items: center;
-  color: var(--gold);
-  font-size: 52px;
-  line-height: 1;
-  font-family: "Times New Roman", Georgia, serif;
-  font-weight: 400;
-  text-shadow: 0 8px 20px rgba(168, 120, 36, 0.22);
-}
 
 .crossMark {
-  font-size: 52px;
-  width: 58px;
-  height: 58px;
+  position: relative;
+  width: 54px;
+  height: 70px;
+  margin: 0 auto 22px;
+  filter: drop-shadow(0 8px 16px rgba(168, 120, 36, 0.22));
 }
 
+.crossVertical,
+.crossHorizontal {
+  position: absolute;
+  display: block;
+  background: linear-gradient(180deg, var(--gold-light), var(--gold));
+  border-radius: 999px;
+}
+
+.crossVertical {
+  width: 9px;
+  height: 68px;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+}
+
+.crossHorizontal {
+  width: 42px;
+  height: 8px;
+  left: 50%;
+  top: 22px;
+  transform: translateX(-50%);
+}
 .inviteKicker {
   display: inline-flex;
   align-items: center;
@@ -957,5 +969,17 @@ textarea {
   .statCard strong {
     font-size: 38px;
   }
+  .musicPlayerBox {
+  left: 16px;
+  right: 16px;
+  bottom: 80px;
+}
+
+.musicButton {
+  width: 100%;
+  justify-content: center;
+  padding: 14px 18px;
+  font-size: 15px;
+}
 
 }
