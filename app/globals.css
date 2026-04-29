@@ -970,11 +970,21 @@ textarea {
     font-size: 38px;
   }
   .musicPlayerBox {
-  left: 16px;
-  right: 16px;
-  bottom: 80px;
-}
+    left: 16px;
+    right: auto;
+    bottom: 80px;
+  }
 
+  .musicButton {
+    width: 52px;
+    height: 52px;
+    padding: 0;
+    border-radius: 999px;
+    justify-content: center;
+  }
 
+  .musicButton span {
+    display: none;
+  }
 
 }
