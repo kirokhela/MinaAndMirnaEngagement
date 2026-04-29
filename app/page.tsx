@@ -20,7 +20,7 @@ const wedding = {
   date: process.env.NEXT_PUBLIC_WEDDING_DATE || "Friday, 15 May 2026",
   time: process.env.NEXT_PUBLIC_WEDDING_TIME || "6:00 PM",
   Church: process.env.NEXT_PUBLIC_WEDDING_CHURCH || "St. Mary and St. Athanasius Church, Nasr City",
-  location: process.env.NEXT_PUBLIC_WEDDING_LOCATION || "Nile Hall, Fleet Club, El Zamalek",
+  location: process.env.NEXT_PUBLIC_WEDDING_LOCATION || "Fleet Club (Nile Hall), El Zamalek",
 };
 
 type Person = {
