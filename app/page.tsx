@@ -189,33 +189,24 @@ export default function HomePage() {
   />
 </label>
 
-          <div className="formGrid">
-            <label className="field">
-              <span>Attendance</span>
-              <select
-                value={form.attending}
-                onChange={(e) => setForm({ ...form, attending: e.target.value })}
-              >
-                <option value="yes">Yes, I will attend</option>
-                <option value="maybe">Maybe</option>
-                <option value="no">No, sorry</option>
-              </select>
-            </label>
+         <div className="attendanceButtons">
+  <button
+    type="button"
+    className={`attendanceOption ${form.attending === "yes" ? "active" : ""}`}
+    onClick={() => setForm({ ...form, attending: "yes", guestsCount: 1 })}
+  >
+    Yes, I will attend
+  </button>
 
-            <label className="field">
-              <span>People</span>
-              <input
-                type="number"
-                min="0"
-                max="20"
-                value={form.guestsCount}
-                onChange={(e) =>
-                  setForm({ ...form, guestsCount: Number(e.target.value) })
-                }
-                required
-              />
-            </label>
-          </div>
+
+  <button
+    type="button"
+    className={`attendanceOption ${form.attending === "no" ? "active" : ""}`}
+    onClick={() => setForm({ ...form, attending: "no", guestsCount: 1 })}
+  >
+    No, sorry
+  </button>
+</div>
 
           <label className="field">
             <span>Leave a message for the host</span>
