@@ -252,7 +252,7 @@ if (hasAttendingPerson) {
                       <input
                         value={person.name}
                         onChange={(e) => updatePerson(index, "name", e.target.value)}
-                        placeholder="Example: Kirolos Amgad"
+                        placeholder="Example: John Edward"
                         required
                       />
                     </label>
