@@ -18,7 +18,7 @@ const wedding = {
   groom: process.env.NEXT_PUBLIC_WEDDING_GROOM || "Mina",
   bride: process.env.NEXT_PUBLIC_WEDDING_BRIDE || "Mirna",
   date: process.env.NEXT_PUBLIC_WEDDING_DATE || "Friday, 15 May 2026",
-  time: process.env.NEXT_PUBLIC_WEDDING_TIME || "6:00 PM",
+  time: process.env.NEXT_PUBLIC_WEDDING_TIME || "4:00 PM",
   Church: process.env.NEXT_PUBLIC_WEDDING_CHURCH || "St. Mary and St. Athanasius Church, Nasr City",
   location: process.env.NEXT_PUBLIC_WEDDING_LOCATION || "Fleet Club (Nile Hall), El Zamalek",
 };
@@ -188,14 +188,31 @@ if (hasAttendingPerson) {
               </div>
             </div>
 
-               <div className="ChurchlocationBox">
-              <p>    <MapPin size={20} /> {wedding.Church}</p>
-            </div>
+<div className="eventSchedule">
+  <div className="scheduleItem">
+    <div className="scheduleTime">04:00 PM</div>
+    <div className="scheduleInfo">
+      <strong>Church Ceremony</strong>
+      <p>
+        <MapPin size={18} />
+        {wedding.Church}
+      </p>
+    </div>
+  </div>
 
-            <div className="locationBox">
-           
-              <p>   <MapPin size={20} /> {wedding.location}</p>
-            </div>
+  <div className="scheduleDivider" />
+
+  <div className="scheduleItem">
+    <div className="scheduleTime">06:00 PM</div>
+    <div className="scheduleInfo">
+      <strong>Nile Hall Reception</strong>
+      <p>
+        <MapPin size={18} />
+        {wedding.location}
+      </p>
+    </div>
+  </div>
+</div>
 
             <div className="heroDetails">
               <a
