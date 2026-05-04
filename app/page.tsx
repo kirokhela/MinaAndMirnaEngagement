@@ -9,7 +9,7 @@ import {
   Sparkles,
   Trash2,
   Volume2,
-  VolumeX
+  VolumeX,
 } from "lucide-react";
 import Link from "next/link";
 import { useRef, useState } from "react";
@@ -19,9 +19,16 @@ const wedding = {
   bride: process.env.NEXT_PUBLIC_WEDDING_BRIDE || "Mirna",
   date: process.env.NEXT_PUBLIC_WEDDING_DATE || "Friday, 15 May 2026",
   time: process.env.NEXT_PUBLIC_WEDDING_TIME || "4:00 PM",
-  Church: process.env.NEXT_PUBLIC_WEDDING_CHURCH || "St. Mary and St. Athanasius Church, Nasr City",
-  location: process.env.NEXT_PUBLIC_WEDDING_LOCATION || "Fleet Club (Nile Hall), El Zamalek",
+  Church:
+    process.env.NEXT_PUBLIC_WEDDING_CHURCH ||
+    "St. Mary and St. Athanasius Church, Nasr City",
+  location:
+    process.env.NEXT_PUBLIC_WEDDING_LOCATION ||
+    "Fleet Club (Nile Hall), El Zamalek",
 };
+
+const isMaintenanceMode =
+  process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
 
 type Person = {
   name: string;
@@ -30,21 +37,38 @@ type Person = {
 };
 
 export default function HomePage() {
-  const [musicStarted, setMusicStarted] = useState(false);
-const audioRef = useRef<HTMLAudioElement | null>(null);
-
-function toggleMusic() {
-  const audio = audioRef.current;
-  if (!audio) return;
-
-  if (musicStarted) {
-    audio.pause();
-    setMusicStarted(false);
-  } else {
-    audio.play();
-    setMusicStarted(true);
+  if (isMaintenanceMode) {
+    return <MaintenancePage />;
   }
+
+  return <WeddingWebsite />;
 }
+
+function MaintenancePage() {
+  return (
+    <main className="maintenancePage">
+      <div className="maintenanceCard">
+        <div className="maintenanceIcon">💍</div>
+
+        <p className="maintenanceKicker">Mina & Mirna</p>
+
+        <h1>Reception Reservation Update</h1>
+
+        <p>
+        We wanted to take a moment to sincerely apologize to those who didn’t get a chance to apply for their reservation, 
+        the reception venue reached full capacity, and we are unable to accommodate additional guests. 
+        Please know that the Engagement ceremony will still take place at st mary and st Athanasius church as planned, 
+        and we’re so grateful for your understanding and support.
+        </p>
+      </div>
+    </main>
+  );
+}
+
+function WeddingWebsite() {
+  const [musicStarted, setMusicStarted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
   const [people, setPeople] = useState<Person[]>([
     { name: "", phone: "", attending: "yes" },
   ]);
@@ -53,6 +77,19 @@ function toggleMusic() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  function toggleMusic() {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (musicStarted) {
+      audio.pause();
+      setMusicStarted(false);
+    } else {
+      audio.play();
+      setMusicStarted(true);
+    }
+  }
 
   function updatePerson(index: number, field: keyof Person, value: string) {
     setPeople((current) => {
@@ -102,13 +139,16 @@ function toggleMusic() {
         }
       }
 
-  const hasAttendingPerson = people.some((person) => person.attending === "yes");
+      const hasAttendingPerson = people.some(
+        (person) => person.attending === "yes"
+      );
 
-if (hasAttendingPerson) {
-  setMessage("Thank you! Waiting for you ❤️");
-} else {
-  setMessage("We Will Miss U 😭");
-}
+      if (hasAttendingPerson) {
+        setMessage("Thank you! Waiting for you ❤️");
+      } else {
+        setMessage("We Will Miss U 😭");
+      }
+
       setPeople([{ name: "", phone: "", attending: "yes" }]);
       setNote("");
     } catch {
@@ -123,18 +163,18 @@ if (hasAttendingPerson) {
       <div className="goldGlow goldGlowOne" />
       <div className="goldGlow goldGlowTwo" />
 
-<div className="musicPlayerBox">
-  <button
-    type="button"
-    className={`musicButton ${musicStarted ? "playing" : ""}`}
-    onClick={toggleMusic}
-  >
-    {musicStarted ? <VolumeX size={22} /> : <Volume2 size={22} />}
-    <span>{musicStarted ? "Stop Music" : "Play Wedding Music"}</span>
-  </button>
+      <div className="musicPlayerBox">
+        <button
+          type="button"
+          className={`musicButton ${musicStarted ? "playing" : ""}`}
+          onClick={toggleMusic}
+        >
+          {musicStarted ? <VolumeX size={22} /> : <Volume2 size={22} />}
+          <span>{musicStarted ? "Stop Music" : "Play Wedding Music"}</span>
+        </button>
 
-  <audio ref={audioRef} src="/music/wedding.mp3" loop preload="auto" />
-</div>
+        <audio ref={audioRef} src="/music/wedding.mp3" loop preload="auto" />
+      </div>
 
       <div className="weddingContainer">
         <nav className="weddingNav">
@@ -152,10 +192,10 @@ if (hasAttendingPerson) {
 
         <section className="weddingHero">
           <div className="invitationCard">
-     <div className="crossMark" aria-label="Cross">
-  <span className="crossVertical" />
-  <span className="crossHorizontal" />
-</div>
+            <div className="crossMark" aria-label="Cross">
+              <span className="crossVertical" />
+              <span className="crossHorizontal" />
+            </div>
 
             <div className="inviteKicker">
               <Sparkles size={16} />
@@ -188,31 +228,31 @@ if (hasAttendingPerson) {
               </div>
             </div>
 
-<div className="eventSchedule">
-  <div className="scheduleItem">
-    <div className="scheduleTime">04:00 PM</div>
-    <div className="scheduleInfo">
-      <strong>Church Ceremony</strong>
-      <p>
-        <MapPin size={18} />
-        {wedding.Church}
-      </p>
-    </div>
-  </div>
+            <div className="eventSchedule">
+              <div className="scheduleItem">
+                <div className="scheduleTime">04:00 PM</div>
+                <div className="scheduleInfo">
+                  <strong>Church Ceremony</strong>
+                  <p>
+                    <MapPin size={18} />
+                    {wedding.Church}
+                  </p>
+                </div>
+              </div>
 
-  <div className="scheduleDivider" />
+              <div className="scheduleDivider" />
 
-  <div className="scheduleItem">
-    <div className="scheduleTime">06:00 PM</div>
-    <div className="scheduleInfo">
-      <strong>Nile Hall Reception</strong>
-      <p>
-        <MapPin size={18} />
-        {wedding.location}
-      </p>
-    </div>
-  </div>
-</div>
+              <div className="scheduleItem">
+                <div className="scheduleTime">06:00 PM</div>
+                <div className="scheduleInfo">
+                  <strong>Nile Hall Reception</strong>
+                  <p>
+                    <MapPin size={18} />
+                    {wedding.location}
+                  </p>
+                </div>
+              </div>
+            </div>
 
             <div className="heroDetails">
               <a
@@ -268,7 +308,9 @@ if (hasAttendingPerson) {
                       <span>Full Name</span>
                       <input
                         value={person.name}
-                        onChange={(e) => updatePerson(index, "name", e.target.value)}
+                        onChange={(e) =>
+                          updatePerson(index, "name", e.target.value)
+                        }
                         placeholder="Example: John Edward"
                         required
                       />
@@ -301,7 +343,9 @@ if (hasAttendingPerson) {
                         className={`attendanceOption ${
                           person.attending === "yes" ? "active" : ""
                         }`}
-                        onClick={() => updatePerson(index, "attending", "yes")}
+                        onClick={() =>
+                          updatePerson(index, "attending", "yes")
+                        }
                       >
                         Yes, I will attend
                       </button>
@@ -311,7 +355,9 @@ if (hasAttendingPerson) {
                         className={`attendanceOption ${
                           person.attending === "no" ? "active" : ""
                         }`}
-                        onClick={() => updatePerson(index, "attending", "no")}
+                        onClick={() =>
+                          updatePerson(index, "attending", "no")
+                        }
                       >
                         No, sorry
                       </button>
